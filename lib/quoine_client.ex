@@ -37,6 +37,7 @@ defmodule QuoineClient do
     |> case do
          {:ok, %HTTPoison.Response{status_code: 200, body: body}} -> {:ok, Poison.decode!(body)}
          {:ok, %HTTPoison.Response{status_code: status_code, body: body}} when status_code in [400, 422, 503] -> {:error, Poison.decode!(body)}
+         {:ok, %HTTPoison.Response{status_code: 404}} -> {:error, :not_found}
          {:ok, %HTTPoison.Response{status_code: 401}} -> {:error, :unauthorized}
          {:ok, %HTTPoison.Response{status_code: 429}} -> {:error, :too_many_requests}
        end
